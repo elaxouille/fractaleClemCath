@@ -6,7 +6,6 @@ Branch branch1;
 Branch branch2;
 Branch branch3;
 Branch branch4;
-PImage image;
 String fichier[];
 int nbLettres, nbCaracteres, nbChiffres;
 String listeC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -23,7 +22,6 @@ void setup()
   branch2 = new Branch(0);
   branch3 = new Branch(0);
   branch4 = new Branch(0);
-  image = loadImage("image.png");
   println("Setup terminé");
 }
  
