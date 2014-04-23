@@ -1,22 +1,25 @@
-int RECURSE_DEPTH = 6; //B VARIE ENTRE 6 ET 20 =========== 
+int RECURSE_DEPTH = 6; //B VARIE ENTRE 6 ET 20 =========== NBCHIFFRES
 float VANGLE = 0;//BINGO VARIE ENTRE 1 et l'infini ======= NBLETTRES
-float vitesseRotation = 0.8; // VARIE ENTRE 0 et 6
+float vitesseRotation = 1; // VARIE ENTRE 0 et 3
+float epaisseur = 1; // VARIE ENTRE 1 ET 12
 float HANGLE = 0;
 Branch branch1;
 Branch branch2;
 Branch branch3;
 Branch branch4;
 String fichier[];
-int nbLettres, nbCaracteres, nbChiffres;
+int[] nbTout;
+int nbLettres, nbCaracteres;
 String listeC = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 String listeN = "0123456789";
+int taille =100;
 
  
 void setup()
 {
   println("Setup commencé");
-  size (800,800);
-  strokeWeight(2);
+  size (4961,4961);
+  strokeWeight(epaisseur);
   background(0);
   branch1 = new Branch(0);
   branch2 = new Branch(0);
@@ -26,28 +29,21 @@ void setup()
 }
  
 void draw() {
-  
+
   String fichier[] = loadStrings("caract.txt"); // Chargement du texte
   String suite = join(fichier,"");              // Suppression des lignes
   String triplesuite = suite.replace(" ","");   // Suppression des espaces (marche pas)
-  println(suite);
-  println("triplesuite ::: "+triplesuite);
-  println("\r \r");
-  nbCaracteres = triplesuite.length();
-  println("premier nombre : "+nbCaracteres);
-  for (int i = 0; i < nbCaracteres; i++) {
-
-  }
-
-  println("il y a "+nbLettres+" lettres et "+nbChiffres+" chiffres");
-  VANGLE = nbCaracteres;
-
+  nbCaracteres = triplesuite.length();            
+  VANGLE = nbCaracteres;                        // PREMIERE INJECTION
+  nbTout = countNumbers(triplesuite);           // CHARGMENT DE LA DEUXIEME ET TROISIEME INJECTION
+  RECURSE_DEPTH = int(map(nbTout[0],0,nbCaracteres,6,20));//DEUXIEME INJECTION
+  vitesseRotation = map(nbTout[1],0,nbCaracteres,0,3);//TROISIEME INJECTION
   background(255);
-  branch1.update(width / 2, height /2, HALF_PI, 100);
-  branch2.update(width / 2, height /2, 2 * HALF_PI, 100);
-  branch3.update(width / 2, height /2, 3 * HALF_PI, 100);
-  branch4.update(width / 2, height /2, 4 * HALF_PI, 100);
-  String nomFichier = nbCaracteres+"caracteres.png";
+  branch1.update(width / 2, height /2, HALF_PI, taille);
+  branch2.update(width / 2, height /2, 2 * HALF_PI, taille);
+  branch3.update(width / 2, height /2, 3 * HALF_PI, taille);
+  branch4.update(width / 2, height /2, 4 * HALF_PI, taille);
+  String nomFichier = "rendu-"+day()+"-"+month()+"-"+year()+"-"+hour()+"-"+minute()+"-"+second()+".png";
   save(nomFichier);
   exit();
 }
@@ -83,3 +79,19 @@ class Branch {
     }
   }
 };
+
+
+int[] countNumbers(String toTest) {
+  // 0 : chiffres
+  // 1 : lettres
+  int[] compte = {0,0};
+  for (int i=0; i < toTest.length(); i++) { 
+    char c = toTest.charAt(i);
+    if (c < '0' || c > '9') {
+      compte[1]++;
+    } else {
+      compte[0]++;
+    }
+  }
+  return compte;
+}
